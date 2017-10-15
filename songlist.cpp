@@ -68,7 +68,7 @@ QVariant SongList::data(const QModelIndex &index, int role) const {
         case Album:
             return songs[row].get_album();
         case Duration:
-            return songs[row].get_duration();
+            return songs[row].get_duration_str();
         }
 
         break;
@@ -121,7 +121,7 @@ Song &SongList::get_song(int pos) {
 
 void SongList::setPlaying(QString playing) {
     this->playing = playing;
-	refresh();
+    refresh();
 }
 
 QString SongList::getPlaying() const {
@@ -129,18 +129,35 @@ QString SongList::getPlaying() const {
 }
 
 void SongList::sort(int column, Qt::SortOrder order) {
+    QString (Song::*fct)() const = nullptr;
+
     switch (column) {
     case Title:
-        if (order == Qt::DescendingOrder) {
-            std::sort(songs.begin(), songs.end(),
-                      [=](auto &a, auto &b) { return a.get_title().compare(b.get_title()); });
-        } else {
-            std::sort(songs.begin(), songs.end(),
-                      [=](auto &a, auto &b) { return b.get_title().compare(a.get_title()); });
-        }
+        fct = &Song::get_title;
+        break;
+    case Duration:
+        fct = &Song::get_duration_str;
+        break;
+    case Album:
+		fct = &Song::get_album;
+			break;
+	case Artist:
+		fct = &Song::get_artist;
+		break;
     }
 	
-	refresh();
+	if (fct) {
+		if (order == Qt::DescendingOrder) {
+            std::sort(songs.begin(), songs.end(),
+                      [=](auto &a, auto &b) { return (a.*fct)().compare((b.*fct)()); });
+        } else {
+            std::sort(songs.begin(), songs.end(),
+                      [=](auto &a, auto &b) { return (b.*fct)().compare((a.*fct)()); });
+        }
+		refresh();
+	}
+
+    
 }
 
 void SongList::refresh() {

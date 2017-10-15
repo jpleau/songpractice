@@ -20,6 +20,7 @@
 #define MAINWINDOW_H
 
 #include "settings.h"
+#include "song.h"
 
 #include <QMainWindow>
 #include <QMediaPlayer>
@@ -58,6 +59,17 @@ private:
 	std::unique_ptr<QMediaPlaylist> playlist;
 	
 	QString playing;
+	
+	Song *current_song = nullptr;
+	
+	void update_label(int secs);
+	
+	void toggle_loop_fields(bool enabled);
+	
+	int loop_from;
+	int loop_to;
+	
+	QString last_song_path;
 };
 
 #endif

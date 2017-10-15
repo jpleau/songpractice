@@ -50,8 +50,12 @@ QString Song::get_title() const {
     return title;
 }
 
-QString Song::get_duration() const {
+QString Song::get_duration_str() const {
     return duration_str;
+}
+
+int Song::get_duration() const {
+    return duration;
 }
 
 QString Song::get_filename() const {

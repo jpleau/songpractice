@@ -26,7 +26,7 @@
 class SongList : public QAbstractTableModel {
     Q_OBJECT
 
-	enum {
+	enum : int {
 		Duration = 0,
 		Title = 1,
 		Artist = 2,

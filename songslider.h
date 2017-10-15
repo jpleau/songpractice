@@ -1,6 +1,6 @@
 /*
- * song.h
- * Copyright (C) 2016  Jason Pleau <jason@jpleau.ca>
+ * songslider.h
+ * Copyright (C) 2017  Jason Pleau <jason@jpleau.ca>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,41 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SONG_H
-#define SONG_H
+#ifndef SONGSLIDER_H
+#define SONGSLIDER_H
 
-#include <QString>
+#include <QSlider>
+#include <QMouseEvent>
 
-class Song {
+#include <QDebug>
+
+class SongSlider : public QSlider {
+	Q_OBJECT
 public:
-	Song() = default;
-    Song(QString filename);
+	SongSlider(QWidget *parent = 0); 
+	~SongSlider();
+	
+	bool isSliding() const;
+	
+signals:
+	void onClick(int val);
+	void onMove(int val);
 
-    QString get_artist() const;
-    QString get_album() const;
-    QString get_title() const;
-	int get_duration() const;
-    QString get_duration_str() const;
-	QString get_filename() const;
-
-	QString toString() const;
-	bool is_valid() const { return valid; }
+protected:
+	void mouseReleaseEvent(QMouseEvent *event);
+	void mouseMoveEvent(QMouseEvent *event);
+	void mousePressEvent(QMouseEvent *event);
 	
-	bool operator == (const Song &other);
+	bool sliding;
 	
-	static QString seconds_to_str(int duration);
-
-private:
-	QString artist;
-	QString album;
-	QString title;
-	int duration;
-	QString duration_str;
-	QString filename;
-	
-	
-	
-	bool valid;
 };
 
-#endif // SONG_H
+#endif // SONGSLIDER_H

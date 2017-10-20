@@ -1,4 +1,4 @@
-/*
+﻿/*
  * mainwindow.h
  * Copyright (C) 2016  Jason Pleau <jason@jpleau.ca>
  *

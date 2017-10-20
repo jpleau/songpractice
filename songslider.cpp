@@ -21,6 +21,7 @@
 #include <QDebug>
 
 SongSlider::SongSlider(QWidget* parent) : QSlider(parent) {
+	sliding = false;
 }
 
 SongSlider::~SongSlider() {

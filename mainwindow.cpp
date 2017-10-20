@@ -79,11 +79,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->table->installEventFilter(this);
 
-    ui->button_play->setIcon(QIcon::fromTheme("media-playback-start"));
-    ui->button_stop->setIcon(QIcon::fromTheme("media-playback-stop"));
-    ui->button_open->setIcon(QIcon::fromTheme("document-open"));
-    ui->button_delete->setIcon(QIcon::fromTheme("edit-delete"));
-
     for (auto &p : settings.getPaths()) {
         song_model->add_song(p);
     }
@@ -105,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 					int secs = static_cast<int>(position / 1000);
 					update_label(secs);
 					if (ui->looping->isChecked()) {
-						if (loop_from >= 0 && loop_to > loop_from) {
+						if (loop_from > 0 && loop_to > loop_from) {
 							if (secs > loop_to) {
 								player.setPosition(loop_from * 1000);
 							}
@@ -177,8 +172,8 @@ void MainWindow::playSong(int pos) {
 	
 	if (path != last_song_path) {
 		loop_from = loop_to = 0;
-		ui->loop_from->setText("0:00");
-		ui->loop_to->setText("0:00");
+		ui->loop_from->setText("00:00");
+		ui->loop_to->setText("00:00");
 		ui->looping->setChecked(false);
 	}
 	
@@ -218,11 +213,20 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event) {
             deleteSong();
             return true;
 
-        case Qt::Key_Space:
-            player.stop();
-            playlist->setCurrentIndex(0);
-            player.play();
+        case Qt::Key_Space: {
+			bool beginning = ui->looping->isChecked() && 
+					loop_from >= 0 && loop_to > loop_from && 
+					QGuiApplication::keyboardModifiers() & Qt::ControlModifier;
+
+			if (beginning) {
+				player.stop();
+				playlist->setCurrentIndex(0);
+				player.play();
+			} else{
+				player.setPosition(loop_from);
+			}
             return true;
+		}
 			
 		case Qt::Key_Escape:
 			player.stop();

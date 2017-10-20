@@ -39,6 +39,7 @@ QVariant SongList::headerData(int section, Qt::Orientation orientation, int role
             }
         }
     }
+
     return QVariant();
 }
 

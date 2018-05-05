@@ -28,7 +28,7 @@ unix {
 }
 
 QMAKE_CXXFLAGS += -std=c++14
-target.path = $$BINDIR/songpractice
+target.path = $$BINDIR
 desktop.path = $$DATADIR/applications
 desktop.files = songpractice.desktop
 

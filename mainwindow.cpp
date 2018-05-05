@@ -88,7 +88,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     playlist.reset(new QMediaPlaylist);
 	
 	ui->table->horizontalHeader()->setSectionResizeMode (QHeaderView::Interactive);
-	ui->table->setSortingEnabled(true);
 	
 	
 	ui->slider->setValue(0);
@@ -98,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 			if (current_song != nullptr) {
 				if (!ui->slider->isSliding()) {
 					int secs = static_cast<int>(position / 1000);
-					update_label(secs);
+					this->update_label(secs);
 					if (ui->looping->isChecked()) {
 						if (loop_from > 0 && loop_to > loop_from) {
 							if (secs > loop_to) {
@@ -218,6 +217,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event) {
 					loop_from >= 0 && loop_to > loop_from && 
 					QGuiApplication::keyboardModifiers() & Qt::ControlModifier;
 
+			beginning = true;
 			if (beginning) {
 				player.stop();
 				playlist->setCurrentIndex(0);

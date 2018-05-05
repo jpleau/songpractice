@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=SongPractice
+Exec=songpractice
+Terminal=false
+Type=Application
+StartupNotify=true
